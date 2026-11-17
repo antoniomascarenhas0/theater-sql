@@ -55,20 +55,19 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE Employee (
-    EmployeeID INT NOT NULL, 
     TaxNumber INT NOT NULL, 
     BirthDate DATE, 
     Role CHAR(10),
-    PRIMARY KEY(EmployeeID),
+    PRIMARY KEY(TaxNumber),
     FOREIGN KEY(TaxNumber) REFERENCES Person
 );
 
 CREATE TABLE Holder(
-    EmployeeID INT NOT NULL, 
+    TaxNumber INT NOT NULL, 
     ShiftID INT NOT NULL, 
     Day DATE,
-    PRIMARY KEY(EmployeeID, Day),
-    FOREIGN KEY(EmployeeID) REFERENCES Employee,
+    PRIMARY KEY(TaxNumber, Day),
+    FOREIGN KEY(TaxNumber) REFERENCES Employee,
     FOREIGN KEY(ShiftID) REFERENCES Shift
 );
 
@@ -79,10 +78,10 @@ CREATE TABLE Shift(
     PRIMARY KEY(ShiftID)
 );
 
-CREATE TABLE Client (
-    ClientID INT NOT NULL, 
+CREATE TABLE Client ( 
     TaxNumber INT NOT NULL,
-    PRIMARY KEY(ClientID),
+    NumTickets INT NOT NULL,
+    PRIMARY KEY(TaxNumber),
     FOREIGN KEY(TaxNumber) REFERENCES Person
 );
 
@@ -92,13 +91,13 @@ CREATE TABLE Ticket(
     PaymentMethod CHAR(10), 
     SessionID INT NOT NULL, 
     SeatID INT NOT NULL, 
-    EmployeeID INT NOT NULL, 
-    ClientID INT NOT NULL,
+    Seller INT NOT NULL, 
+    Buyer INT NOT NULL,
     PRIMARY KEY(TicketID),
     FOREIGN KEY (SessionID) REFERENCES Session,
     FOREIGN KEY(SeatID) REFERENCES Seat,
-    FOREIGN KEY(EmployeeID) REFERENCES Employee,
-    FOREIGN KEY(ClientID) REFERENCES Client
+    FOREIGN KEY(Seller) REFERENCES Employee,
+    FOREIGN KEY(Buyer) REFERENCES Client
 );
 
 CREATE TABLE Product (
@@ -111,11 +110,12 @@ CREATE TABLE Product (
 
 CREATE TABLE BarSale (
     BarSaleID INT NOT NULL, 
-    EmployeeID INT NOT NULL, 
-    ClientID INT NOT NULL,
+    Seller INT NOT NULL, 
+    Buyer INT NOT NULL,
+    TotalPrice INT NOT NULL,
     PRIMARY KEY(BarSaleID),
-    FOREIGN KEY(EmployeeID) REFERENCES Employee,
-    FOREIGN KEY(ClientID) REFERENCES Client
+    FOREIGN KEY(Seller) REFERENCES Employee,
+    FOREIGN KEY(Buyer) REFERENCES Client
 );
 
 CREATE TABLE SaleItem(

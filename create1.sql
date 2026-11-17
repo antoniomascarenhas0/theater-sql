@@ -14,7 +14,9 @@ CREATE TABLE Play (
     DatePremiere DATE, 
     GenreID INT,
     PRIMARY KEY(PlayID),
-    FOREIGN KEY(GenreID) REFERENCES Genre
+    FOREIGN KEY(GenreID) 
+        REFERENCES Genre
+        ON UPDATE CASCADE
 
 );
 
@@ -32,8 +34,12 @@ CREATE TABLE Session(
     PlayID INT NOT NULL, 
     AuditoriumID INT NOT NULL,
     PRIMARY KEY(SessionID),
-    FOREIGN KEY (PlayID) REFERENCES Play,
-    FOREIGN KEY (AuditoriumID) REFERENCES Auditorium
+    FOREIGN KEY (PlayID) 
+        REFERENCES Play
+        ON UPDATE CASCADE,
+    FOREIGN KEY (AuditoriumID) 
+        REFERENCES Auditorium
+        ON UPDATE CASCADE
 
 );
 
@@ -43,7 +49,9 @@ CREATE TABLE Seat(
     Accessibility CHAR(10),  
     AuditoriumID INT NOT NULL,
     PRIMARY KEY(SeatID),
-    FOREIGN KEY(AuditoriumID) REFERENCES Auditorium
+    FOREIGN KEY(AuditoriumID) 
+        REFERENCES Auditorium
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Person (
@@ -55,20 +63,27 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE Employee (
+    EmployeeID INT NOT NULL, 
     TaxNumber INT NOT NULL, 
     BirthDate DATE, 
     Role CHAR(10),
-    PRIMARY KEY(TaxNumber),
-    FOREIGN KEY(TaxNumber) REFERENCES Person
+    PRIMARY KEY(EmployeeID),
+    FOREIGN KEY(TaxNumber) 
+        REFERENCES Person
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Holder(
-    TaxNumber INT NOT NULL, 
+    EmployeeID INT NOT NULL, 
     ShiftID INT NOT NULL, 
     Day DATE,
-    PRIMARY KEY(TaxNumber, Day),
-    FOREIGN KEY(TaxNumber) REFERENCES Employee,
-    FOREIGN KEY(ShiftID) REFERENCES Shift
+    PRIMARY KEY(EmployeeID, Day),
+    FOREIGN KEY(EmployeeID) 
+        REFERENCES Employee
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ShiftID) 
+        REFERENCES Shift
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Shift(
@@ -78,11 +93,13 @@ CREATE TABLE Shift(
     PRIMARY KEY(ShiftID)
 );
 
-CREATE TABLE Client ( 
+CREATE TABLE Client (
+    ClientID INT NOT NULL, 
     TaxNumber INT NOT NULL,
-    NumTickets INT NOT NULL,
-    PRIMARY KEY(TaxNumber),
-    FOREIGN KEY(TaxNumber) REFERENCES Person
+    PRIMARY KEY(ClientID),
+    FOREIGN KEY(TaxNumber) 
+        REFERENCES Person
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Ticket(
@@ -91,13 +108,21 @@ CREATE TABLE Ticket(
     PaymentMethod CHAR(10), 
     SessionID INT NOT NULL, 
     SeatID INT NOT NULL, 
-    Seller INT NOT NULL, 
-    Buyer INT NOT NULL,
+    EmployeeID INT NOT NULL, 
+    ClientID INT NOT NULL,
     PRIMARY KEY(TicketID),
-    FOREIGN KEY (SessionID) REFERENCES Session,
-    FOREIGN KEY(SeatID) REFERENCES Seat,
-    FOREIGN KEY(Seller) REFERENCES Employee,
-    FOREIGN KEY(Buyer) REFERENCES Client
+    FOREIGN KEY (SessionID) 
+        REFERENCES Session
+        ON UPDATE CASCADE,
+    FOREIGN KEY(SeatID) 
+        REFERENCES Seat
+        ON UPDATE CASCADE,
+    FOREIGN KEY(EmployeeID) 
+        REFERENCES Employee
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ClientID) 
+        REFERENCES Client
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Product (
@@ -110,12 +135,15 @@ CREATE TABLE Product (
 
 CREATE TABLE BarSale (
     BarSaleID INT NOT NULL, 
-    Seller INT NOT NULL, 
-    Buyer INT NOT NULL,
-    TotalPrice INT NOT NULL,
+    EmployeeID INT NOT NULL, 
+    ClientID INT NOT NULL,
     PRIMARY KEY(BarSaleID),
-    FOREIGN KEY(Seller) REFERENCES Employee,
-    FOREIGN KEY(Buyer) REFERENCES Client
+    FOREIGN KEY(EmployeeID) 
+        REFERENCES Employee
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ClientID) 
+        REFERENCES Client
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE SaleItem(
@@ -123,7 +151,11 @@ CREATE TABLE SaleItem(
     ProductID INT NOT NULL, 
     Quantity INT,
     PRIMARY KEY(BarSaleID),
-    FOREIGN KEY(BarSaleID) REFERENCES BarSale,
-    FOREIGN KEY(ProductID) REFERENCES Product
+    FOREIGN KEY(BarSaleID) 
+        REFERENCES BarSale
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ProductID) 
+        REFERENCES Product
+        ON UPDATE CASCADE
 
 );

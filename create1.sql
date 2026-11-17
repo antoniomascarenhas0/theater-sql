@@ -72,15 +72,59 @@ CREATE TABLE Holder(
     FOREIGN KEY(ShiftID) REFERENCES Shift
 );
 
-CREATE TABLE Shift(ShiftID, StartTime, EndTime);
+CREATE TABLE Shift(
+    ShiftID INT, 
+    StartTime TIME, 
+    EndTime TIME,
+    PRIMARY KEY(ShiftID)
+);
 
-CREATE TABLE Client (ClientID, TaxNumber -> Person);
+CREATE TABLE Client (
+    ClientID INT, 
+    TaxNumber INT,
+    PRIMARY KEY(ClientID),
+    FOREIGN KEY(TaxNumber) REFERENCES Person
+);
 
-CREATE TABLE Ticket(TicketID, Price, PaymentMethod, SessionID ->Session [NN], SeatID -> Seat [NN], EmployeeID -> Employee [NN], ClientID -> Client [NN]);
+CREATE TABLE Ticket(
+    TicketID INT, 
+    Price INT, 
+    PaymentMethod CHAR(10), 
+    SessionID INT, 
+    SeatID INT, 
+    EmployeeID INT, 
+    ClientID INT,
+    PRIMARY KEY(TicketID),
+    FOREIGN KEY (SessionID) REFERENCES Session,
+    FOREIGN KEY(SeatID) REFERENCES Seat,
+    FOREIGN KEY(EmployeeID) REFERENCES Employee,
+    FOREIGN KEY(ClientID) REFERENCES Client
+);
 
-CREATE TABLE Product (ProductID, Name, Price, Stock);
+CREATE TABLE Product (
+    ProductID INT, 
+    Name CHAR(100), 
+    Price INT, 
+    Stock INT,
+    PRIMARY KEY(ProductID)
+);
 
-CREATE TABLE BarSale (BarSaleID, EmployeeID -> Employee [NN], ClientID -> Client [NN]);
+CREATE TABLE BarSale (
+    BarSaleID INT, 
+    EmployeeID INT, 
+    ClientID INT,
+    PRIMARY KEY(BarSaleID),
+    FOREIGN KEY(EmployeeID) REFERENCES Employee,
+    FOREIGN KEY(ClientID) REFERENCES Client
+);
 
-CREATE TABLE SaleItem(BarSaleID->BarSale, ProductID->Product, Quantity);
+CREATE TABLE SaleItem(
+    BarSaleID INT, 
+    ProductID INT, 
+    Quantity INT,
+    PRIMARY KEY(BarSaleID),
+    FOREIGN KEY(BarSaleID) REFERENCES BarSale,
+    FOREIGN KEY(ProductID) REFERENCES Product
+
+);
 

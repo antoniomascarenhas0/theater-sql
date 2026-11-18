@@ -18,19 +18,19 @@ DROP TABLE IF EXISTS Genre;
 
 CREATE TABLE Genre(
     GenreID INT NOT NULL,
-    Name CHAR(100),
+    Name CHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY(GenreID)
 
 );
 
 CREATE TABLE Play (
     PlayID INT NOT NULL, 
-    Name CHAR(100), 
-    Duration INT, 
-    Rating INT, 
+    Name CHAR(100) NOT NULL, 
+    Duration INT NOT NULL CHECK (Duration > 0), 
+    Rating INT CHECK (Rating >= 0), 
     Synopsis CHAR(1000), 
     DatePremiere DATE, 
-    GenreID INT,
+    GenreID INT NOT NULL,
     PRIMARY KEY(PlayID),
     FOREIGN KEY(GenreID) 
         REFERENCES Genre
@@ -40,17 +40,18 @@ CREATE TABLE Play (
 
 CREATE TABLE Auditorium(
     AuditoriumID INT NOT NULL, 
-    Capacity INT NOT NULL,
+    Capacity INT NOT NULL CHECK (Capacity>=0),
     PRIMARY KEY(AuditoriumID)
     
 );
 
 CREATE TABLE Session(
     SessionID INT NOT NULL, 
-    Timetable TIME, 
-    Date DATE, 
+    Timetable TIME NOT NULL, 
+    Date DATE NOT NULL, 
     PlayID INT NOT NULL, 
     AuditoriumID INT NOT NULL,
+    UNIQUE(Date, Timetable, AuditoriumID),
     PRIMARY KEY(SessionID),
     FOREIGN KEY (PlayID) 
         REFERENCES Play
@@ -63,8 +64,8 @@ CREATE TABLE Session(
 
 CREATE TABLE Seat(
     SeatID INT NOT NULL, 
-    Type CHAR(10), 
-    Accessibility CHAR(10),  
+    Type CHAR(10) NOT NULL CHECK (Type IN ('Normal', 'Confort', 'First Class')), 
+    Accessibility CHAR(10) NOT NULL CHECK (Accessibility IN ('Yes', 'No')),  
     AuditoriumID INT NOT NULL,
     PRIMARY KEY(SeatID),
     FOREIGN KEY(AuditoriumID) 
@@ -74,7 +75,7 @@ CREATE TABLE Seat(
 
 CREATE TABLE Person (
     TaxNumber INT NOT NULL, 
-    Name CHAR(100), 
+    Name CHAR(100) NOT NULL, 
     PhoneNum INT,
     PRIMARY KEY(TaxNumber)
 
@@ -83,7 +84,7 @@ CREATE TABLE Person (
 CREATE TABLE Employee (
     TaxNumber INT NOT NULL, 
     BirthDate DATE, 
-    Role CHAR(10),
+    Role CHAR(10) NOT NULL CHECK (Role IN ('Cashier', 'Barman', 'Cleaner', 'Play Member')),
     PRIMARY KEY(TaxNumber),
     FOREIGN KEY(TaxNumber) 
         REFERENCES Person
@@ -92,8 +93,8 @@ CREATE TABLE Employee (
 
 CREATE TABLE Shift(
     ShiftID INT NOT NULL, 
-    StartTime TIME, 
-    EndTime TIME,
+    StartTime TIME NOT NULL, 
+    EndTime TIME NOT NULL,
     PRIMARY KEY(ShiftID)
 );
 
@@ -120,12 +121,13 @@ CREATE TABLE Client (
 
 CREATE TABLE Ticket(
     TicketID INT NOT NULL, 
-    Price INT, 
-    PaymentMethod CHAR(10), 
+    Price INT NOT NULL, 
+    PaymentMethod CHAR(10) NOT NULL CHECK (PaymentMethod IN ('Cash', 'Card')), 
     SessionID INT NOT NULL, 
     SeatID INT NOT NULL, 
     Seller INT NOT NULL, 
     Buyer INT NOT NULL,
+    UNIQUE (SessionID, SeatID),
     PRIMARY KEY(TicketID),
     FOREIGN KEY (SessionID) 
         REFERENCES Session
@@ -143,8 +145,8 @@ CREATE TABLE Ticket(
 
 CREATE TABLE Product (
     ProductID INT NOT NULL, 
-    Name CHAR(100), 
-    Price INT, 
+    Name CHAR(100) NOT NULL, 
+    Price INT NOT NULL, 
     Stock INT,
     PRIMARY KEY(ProductID)
 );
@@ -165,7 +167,7 @@ CREATE TABLE BarSale (
 CREATE TABLE SaleItem(
     BarSaleID INT NOT NULL, 
     ProductID INT NOT NULL, 
-    Quantity INT,
+    Quantity INT CHECK (Quantity > 0),
     PRIMARY KEY(BarSaleID, ProductID),
     FOREIGN KEY(BarSaleID) 
         REFERENCES BarSale

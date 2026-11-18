@@ -67,7 +67,7 @@ CREATE TABLE Seat(
     Type CHAR(10) NOT NULL CHECK (Type IN ('Normal', 'Confort', 'First Class')), 
     Accessibility CHAR(10) NOT NULL CHECK (Accessibility IN ('Yes', 'No')),  
     AuditoriumID INT NOT NULL,
-    PRIMARY KEY(SeatID),
+    PRIMARY KEY(SeatID, AuditoriumID),
     FOREIGN KEY(AuditoriumID) 
         REFERENCES Auditorium
         ON UPDATE CASCADE

@@ -1,3 +1,21 @@
+PRAGMA foreign_keys = ON;
+
+DROP TABLE IF EXISTS SaleItem;
+DROP TABLE IF EXISTS BarSale;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS Ticket;
+DROP TABLE IF EXISTS Client;
+DROP TABLE IF EXISTS Holder;
+DROP TABLE IF EXISTS Shift;
+DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS Person;
+DROP TABLE IF EXISTS Seat;
+DROP TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS Auditorium;
+DROP TABLE IF EXISTS Play;
+DROP TABLE IF EXISTS Genre;
+
+
 CREATE TABLE Genre(
     GenreID INT NOT NULL,
     Name CHAR(100),
@@ -63,26 +81,12 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE Employee (
-    EmployeeID INT NOT NULL, 
     TaxNumber INT NOT NULL, 
     BirthDate DATE, 
     Role CHAR(10),
-    PRIMARY KEY(EmployeeID),
+    PRIMARY KEY(TaxNumber),
     FOREIGN KEY(TaxNumber) 
         REFERENCES Person
-        ON UPDATE CASCADE
-);
-
-CREATE TABLE Holder(
-    EmployeeID INT NOT NULL, 
-    ShiftID INT NOT NULL, 
-    Day DATE,
-    PRIMARY KEY(EmployeeID, Day),
-    FOREIGN KEY(EmployeeID) 
-        REFERENCES Employee
-        ON UPDATE CASCADE,
-    FOREIGN KEY(ShiftID) 
-        REFERENCES Shift
         ON UPDATE CASCADE
 );
 
@@ -93,10 +97,22 @@ CREATE TABLE Shift(
     PRIMARY KEY(ShiftID)
 );
 
+CREATE TABLE Holder(
+    TaxNumber INT NOT NULL, 
+    ShiftID INT NOT NULL, 
+    Day DATE,
+    PRIMARY KEY(TaxNumber, Day),
+    FOREIGN KEY(TaxNumber) 
+        REFERENCES Employee
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ShiftID) 
+        REFERENCES Shift
+        ON UPDATE CASCADE
+);
+
 CREATE TABLE Client (
-    ClientID INT NOT NULL, 
     TaxNumber INT NOT NULL,
-    PRIMARY KEY(ClientID),
+    PRIMARY KEY(TaxNumber),
     FOREIGN KEY(TaxNumber) 
         REFERENCES Person
         ON UPDATE CASCADE
@@ -108,8 +124,8 @@ CREATE TABLE Ticket(
     PaymentMethod CHAR(10), 
     SessionID INT NOT NULL, 
     SeatID INT NOT NULL, 
-    EmployeeID INT NOT NULL, 
-    ClientID INT NOT NULL,
+    Seller INT NOT NULL, 
+    Buyer INT NOT NULL,
     PRIMARY KEY(TicketID),
     FOREIGN KEY (SessionID) 
         REFERENCES Session
@@ -117,10 +133,10 @@ CREATE TABLE Ticket(
     FOREIGN KEY(SeatID) 
         REFERENCES Seat
         ON UPDATE CASCADE,
-    FOREIGN KEY(EmployeeID) 
+    FOREIGN KEY(Seller) 
         REFERENCES Employee
         ON UPDATE CASCADE,
-    FOREIGN KEY(ClientID) 
+    FOREIGN KEY(Buyer) 
         REFERENCES Client
         ON UPDATE CASCADE
 );
@@ -135,13 +151,13 @@ CREATE TABLE Product (
 
 CREATE TABLE BarSale (
     BarSaleID INT NOT NULL, 
-    EmployeeID INT NOT NULL, 
-    ClientID INT NOT NULL,
+    Seller INT NOT NULL, 
+    Buyer INT NOT NULL,
     PRIMARY KEY(BarSaleID),
-    FOREIGN KEY(EmployeeID) 
+    FOREIGN KEY(Seller) 
         REFERENCES Employee
         ON UPDATE CASCADE,
-    FOREIGN KEY(ClientID) 
+    FOREIGN KEY(Buyer) 
         REFERENCES Client
         ON UPDATE CASCADE
 );
@@ -150,7 +166,7 @@ CREATE TABLE SaleItem(
     BarSaleID INT NOT NULL, 
     ProductID INT NOT NULL, 
     Quantity INT,
-    PRIMARY KEY(BarSaleID),
+    PRIMARY KEY(BarSaleID, ProductID),
     FOREIGN KEY(BarSaleID) 
         REFERENCES BarSale
         ON UPDATE CASCADE,

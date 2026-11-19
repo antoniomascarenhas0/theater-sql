@@ -95,9 +95,10 @@ CREATE TABLE Shift(
     ShiftID INT NOT NULL, 
     StartTime TIME NOT NULL, 
     EndTime TIME NOT NULL,
-    PRIMARY KEY(ShiftID)
+    PRIMARY KEY(ShiftID),
+    CHECK (EndTime > StartTime)
 );
-CHECK (EndTime > StartTime)
+
 
 CREATE TABLE Holder(
     TaxNumber INT NOT NULL, 
@@ -122,19 +123,19 @@ CREATE TABLE Client (
 
 CREATE TABLE Ticket(
     TicketID INT NOT NULL, 
-    Price INT NOT NULL (Price >= 0), 
+    Price INT NOT NULL CHECK (Price >= 0), 
     PaymentMethod CHAR(10) NOT NULL CHECK (PaymentMethod IN ('Cash', 'Card')), 
     SessionID INT NOT NULL, 
     SeatID INT NOT NULL, 
     Seller INT NOT NULL, 
     Buyer INT NOT NULL,
-    UNIQUE (SessionID, SeatID),
+    AuditoriumID INT NOT NULL,
+    UNIQUE (SessionID, SeatID, AuditoriumID),
     PRIMARY KEY(TicketID),
+    FOREIGN KEY (SeatID, AuditoriumID) 
+        REFERENCES Seat,
     FOREIGN KEY (SessionID) 
         REFERENCES Session
-        ON UPDATE CASCADE,
-    FOREIGN KEY(SeatID) 
-        REFERENCES Seat
         ON UPDATE CASCADE,
     FOREIGN KEY(Seller) 
         REFERENCES Employee
@@ -147,7 +148,7 @@ CREATE TABLE Ticket(
 CREATE TABLE Product (
     ProductID INT NOT NULL, 
     Name CHAR(100) NOT NULL, 
-    Price INT NOT NULL (Price >= 0), 
+    Price INT NOT NULL CHECK (Price >= 0), 
     Stock INT,
     PRIMARY KEY(ProductID)
 );

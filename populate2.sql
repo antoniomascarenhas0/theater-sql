@@ -49,7 +49,7 @@ INSERT INTO Session (SessionID, Timetable, Date, PlayID, AuditoriumID)
 VALUES (4, '21:00:00', '2026-11-18', 4, 2);
 
 INSERT INTO Session (SessionID, Timetable, Date, PlayID, AuditoriumID) 
-VALUES (5, '21:00:00', '2026-11-18', 4, 2);
+VALUES (5, '16:00:00', '2026-11-18', 4, 2);
 
 INSERT INTO Session (SessionID, Timetable, Date, PlayID, AuditoriumID) 
 VALUES (6, '22:00:00', '2026-11-20', 6, 3);
@@ -85,7 +85,7 @@ INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (6, 'First C
 INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (7, 'First Class', 'No', 2);
 INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (8, 'First Class', 'Yes', 2);
 
-INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (1, 'Normal', 'No', 3),;
+INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (1, 'Normal', 'No', 3);
 INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (2, 'Normal', 'Yes', 3);
 INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (3, 'Confort', 'No', 3);
 INSERT INTO Seat (SeatID, Type, Accessibility, AuditoriumID) VALUES (4, 'Confort', 'No', 3);
@@ -145,7 +145,7 @@ INSERT INTO Client (TaxNumber) VALUES (245678901);
 INSERT INTO Client (TaxNumber) VALUES (267890123);
 INSERT INTO Client (TaxNumber) VALUES (256123456);
 INSERT INTO Client (TaxNumber) VALUES (219876543);
-INSERT INTO Client (TaxNumber) VALUES (223456789),
+INSERT INTO Client (TaxNumber) VALUES (223456789);
 INSERT INTO Client (TaxNumber) VALUES (234567891);
 INSERT INTO Client (TaxNumber) VALUES (241234568);
 INSERT INTO Client (TaxNumber) VALUES (252345679);
@@ -154,59 +154,37 @@ INSERT INTO Client (TaxNumber) VALUES (274567891);
 INSERT INTO Client (TaxNumber) VALUES (278901234);
 
 -- Ticket
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (1, 12, 'Card', 1, 1, 214567890, 201234567);
-    
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (2, 12, 'Card', 1, 2, 214567890, 201234567);
+-- Ticket (Session 1 -> Auditório 1: lugares 1..10)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (1, 12, 'Card', 1, 1, 1, 214567890, 201234567);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (2, 12, 'Card', 1, 2, 1, 214567890, 201234567);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (3, 18, 'Cash', 1, 5, 1, 214567890, 245678901);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (4, 25, 'Card', 1, 8, 1, 214567890, 267890123);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (5, 25, 'Card', 1, 9, 1, 214567890, 219876543);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (3, 18, 'Cash', 1, 5, 214567890, 245678901);
+-- Ticket (Session 2 -> Auditório 2: lugares 1..8)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (6, 10, 'Cash', 2, 3, 2, 281234567, 223456789);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (7, 15, 'Card', 2, 6, 2, 281234567, 234567891);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (4, 25, 'Card', 1, 8, 214567890, 267890123);
+-- Ticket (Session 3 -> Auditório 1: lugares 1..10)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (8, 10, 'Cash', 3, 1, 1, 214567890, 241234568);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (9, 14, 'Card', 3, 6, 1, 214567890, 252345679);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (10, 20, 'Card', 3, 10, 1, 214567890, 263456780);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (5, 25, 'Card', 1, 9, 214567890, 219876543);
-    
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (6, 10, 'Cash', 2, 3, 281234567, 223456789);
-    
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (7, 15, 'Card', 2, 6, 281234567, 234567891);
+-- Ticket (Session 4 -> Auditório 2: lugares 1..8)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (11, 15, 'Card', 4, 4, 2, 281234567, 256123456);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (12, 22, 'Card', 4, 7, 2, 281234567, 274567891);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (13, 30, 'Cash', 4, 8, 2, 281234567, 201234567);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (8, 10, 'Cash', 3, 11, 214567890, 241234568);
+-- Ticket (Session 5 -> Auditório 2: lugares 1..8)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (14, 12, 'Cash', 5, 2, 2, 214567890, 245678901);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (15, 18, 'Card', 5, 5, 2, 214567890, 219876543);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (9, 14, 'Card', 3, 14, 214567890, 252345679);
-    
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (10, 20, 'Card', 3, 16, 214567890, 263456780);
+-- Ticket (Session 6 -> Auditório 3: lugares 1..6)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (16, 10, 'Cash', 6, 1, 3, 281234567, 278901234);
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (17, 15, 'Card', 6, 4, 3, 281234567, 223456789);
 
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (11, 15, 'Card', 4, 4, 281234567, 256123456);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (12, 22, 'Card', 4, 7, 281234567, 274567891);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (13, 30, 'Cash', 4, 10, 281234567, 201234567);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (14, 12, 'Cash', 5, 12, 214567890, 245678901);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (15, 18, 'Card', 5, 17, 214567890, 219876543);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (16, 10, 'Cash', 6, 19, 281234567, 278901234);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (17, 15, 'Card', 6, 21, 281234567, 223456789);
-
-INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, Seller, Buyer) 
-VALUES (18, 20, 'Card', 7, 8, 214567890, 234567891);
+-- Ticket (Session 7 -> Auditório 1: lugares 1..10)
+INSERT INTO Ticket (TicketID, Price, PaymentMethod, SessionID, SeatID, AuditoriumID, Seller, Buyer) VALUES (18, 20, 'Card', 7, 8, 1, 214567890, 234567891);
 
 -- Product
 INSERT INTO Product (ProductID, Name, Price, Stock) VALUES (1, 'Água Mineral 50cl', 1.50, 120);
